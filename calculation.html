@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>계산 결과 - 이동식 크레인 안정성 검토</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>이동식 크레인 안정성 검토</h1>
+      <p class="subtitle">계산 결과</p>
+    </header>
+
+    <main class="main">
+      <div class="calculation-actions">
+        <a href="index.html" class="btn btn-secondary">← 입력 페이지로 돌아가기</a>
+      </div>
+
+      <section class="panel" id="input-summary-section">
+        <h2>입력값 요약</h2>
+        <div class="summary-list" id="input-summary"></div>
+      </section>
+
+      <section class="panel" id="result-section">
+        <h2>이동식 크레인의 안정성 검토</h2>
+        <div class="calc-block">
+          <h3 class="calc-block-title">아웃트리거 반력 산정</h3>
+          <p class="calc-formula">Pmax = 0.85 × ( 크레인 중량 + 인양물의 중량 + 부가하중 ) × 1.3 × 0.5 × 1.5</p>
+          <p class="calc-result">Pmax = <span id="outrigger-pmax-value">—</span> kN</p>
+          <p class="calc-formula">지지력(q) = Pmax / 지지판 면적</p>
+          <p class="calc-result">지지력 q = <span id="outrigger-q-value">—</span> kN/m² &nbsp;|&nbsp; 지반지지력 = <span id="ground-bearing-value">—</span> kN/m² &nbsp;|&nbsp; <span id="bearing-result-label" class="bearing-result"></span></p>
+        </div>
+        <div class="calc-block">
+          <h3 class="calc-block-title">인양고리의 안정성 검토</h3>
+          <p class="calc-formula">샤클의 전단 검토</p>
+          <p class="calc-formula">V = 인양물의 중량 × 1.3 / 줄걸이수 (kN)</p>
+          <p class="calc-formula">τ = 단면형상계수 × V / (샤클직경² × π/4) (MPa)</p>
+          <p class="calc-result">V = <span id="shackle-v-value">—</span> kN &nbsp;|&nbsp; τ = <span id="shackle-tau-value">—</span> MPa &nbsp;|&nbsp; 허용전단응력 = <span id="shackle-allowable-value">—</span> MPa &nbsp;|&nbsp; <span id="shackle-result-label" class="bearing-result"></span></p>
+          <p class="calc-formula">샤클의 사용하중 검토</p>
+          <p class="calc-formula">사용하중(kN) = 인양물의 중량 × 하중계수 / 줄걸이수</p>
+          <p class="calc-result">사용하중 = <span id="shackle-working-load-calc">—</span> kN &nbsp;|&nbsp; 샤클 사용하중 = <span id="shackle-working-allowable">—</span> kN &nbsp;|&nbsp; <span id="shackle-working-result-label" class="bearing-result"></span></p>
+        </div>
+        <div class="calc-block" id="sling-stability-block">
+          <h3 class="calc-block-title">줄걸이의 안정성 검토</h3>
+          <div id="sling-formula-wire">
+            <p class="calc-formula">V = 인양물의 중량*9.81 × 1.3 / 줄걸이수 (kN)</p>
+            <p class="calc-formula">FN = 절단하중 / 7 / 하중계수 (kN)</p>
+          </div>
+          <div id="sling-formula-belt" class="hidden">
+            <p class="calc-formula">V = 인양 하중 × 1.3 (kN)</p>
+            <p class="calc-formula">FT = 절단하중 / 7 × 모드계수 (kN), &nbsp; 모드계수 = 가닥수(3이상은 3) × 매다는방법(곧게=1, 초크=0.8, 바구니=2) × cos(줄걸이 각도/2)</p>
+          </div>
+          <p class="calc-result">V = <span id="sling-v-value">—</span> kN &nbsp;|&nbsp; <span id="sling-allowable-name">FN</span> = <span id="sling-allowable-value">—</span> kN &nbsp;|&nbsp; <span id="sling-result-label" class="bearing-result"></span></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>본 검토는 참고용이며, 실제 시공 시 관련 규정 및 제조사 매뉴얼을 확인하세요.</p>
+    </footer>
+  </div>
+
+  <script src="calculation.js"></script>
+</body>
+</html>

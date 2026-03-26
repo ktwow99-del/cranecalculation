@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이동식 크레인 전도 안정성 검토</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>이동식 크레인 전도 안정성 검토</h1>
+      <p class="subtitle">전도 안정성 검토에 필요한 입력값을 입력합니다.</p>
+    </header>
+
+    <main class="main">
+      <form id="stability-form" class="form" novalidate>
+        <section class="panel">
+          <h2>입력값</h2>
+          <div class="field-grid">
+            <label class="field">
+              <span class="label">크레인 자체 중량 (ton)</span>
+              <input type="number" id="crane-weight" name="craneWeight" min="0" step="0.1" placeholder="예: 45" required>
+            </label>
+            <label class="field">
+              <span class="label">양중 하중 (ton)</span>
+              <input type="number" id="load-weight" name="loadWeight" min="0" step="0.1" placeholder="예: 8" required>
+            </label>
+            <label class="field">
+              <span class="label">슬링·훅 등 부가 하중 (ton)</span>
+              <input type="number" id="rigging-weight" name="riggingWeight" min="0" step="0.01" value="0" placeholder="0">
+            </label>
+            <div class="field-row field-row--2col">
+              <label class="field">
+                <span class="label">지지 철판 가로 (m)</span>
+                <input type="number" id="support-plate-width" name="supportPlateWidth" min="0" step="0.01" placeholder="예: 6" required>
+              </label>
+              <label class="field">
+                <span class="label">지지 철판 세로 (m)</span>
+                <input type="number" id="support-plate-height" name="supportPlateHeight" min="0" step="0.01" placeholder="예: 6" required>
+              </label>
+            </div>
+            <label class="field">
+              <span class="label">지반 지지력</span>
+              <select id="ground-bearing" name="groundBearing" class="field-input">
+                <option value="direct">직접입력</option>
+                <option value="hard-rock">경암반</option>
+                <option value="soft-rock-a">연암반(판암, 편암 등 수성암)</option>
+                <option value="soft-rock-b">연암반(혈암, 토단반 등)</option>
+                <option value="gravel">자갈</option>
+                <option value="gravel-sand">자갈+모래</option>
+                <option value="sand-clay">모래+점토 또는 롬토</option>
+                <option value="sand-loam">모래 또는 롬토</option>
+              </select>
+            </label>
+            <div id="ground-bearing-direct-wrap" class="field hidden">
+              <span class="label">지반 지지력 입력값 (kN/m²)</span>
+              <input type="number" id="ground-bearing-direct" name="groundBearingDirect" min="0" step="0.1" placeholder="예: 200">
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>인양고리</h2>
+          <div class="field-grid">
+            <label class="field">
+              <span class="label">단면형상계수 (k)</span>
+              <input type="number" id="section-shape-factor" name="sectionShapeFactor" min="0" step="0.01" placeholder="예: 0.7">
+            </label>
+            <label class="field">
+              <span class="label">샤클 직경 (mm)</span>
+              <input type="number" id="shackle-diameter" name="shackleDiameter" min="0" step="0.1" placeholder="예: 50">
+            </label>
+            <label class="field">
+              <span class="label">샤클 허용전단응력 (MPa)</span>
+              <input type="number" id="shackle-allowable-shear" name="shackleAllowableShear" min="0" step="0.1" placeholder="예: 200">
+            </label>
+            <label class="field">
+              <span class="label">샤클 사용하중 (ton)</span>
+              <input type="number" id="shackle-working-load" name="shackleWorkingLoad" min="0" step="0.1" placeholder="예: 10">
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>줄걸이</h2>
+          <div class="field-grid">
+            <label class="field">
+              <span class="label">줄걸이 방식</span>
+              <select id="sling-type" name="slingType" class="field-input">
+                <option value="wire-rope">와이어 로프</option>
+                <option value="sling-belt">슬링 벨트</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">줄걸이 수 (ea)</span>
+              <input type="number" id="sling-count" name="slingCount" min="1" step="1" placeholder="예: 2">
+            </label>
+            <label class="field">
+              <span class="label">줄걸이 각도 (도)</span>
+              <input type="number" id="sling-angle" name="slingAngle" min="0" max="90" step="0.1" placeholder="예: 60">
+            </label>
+            <label class="field">
+              <span class="label">파단 하중 (kN)</span>
+              <span class="field-hint">(※ 파단 하중이 ton 일 경우 9.8을 곱해주세요)</span>
+              <input type="number" id="breaking-load" name="breakingLoad" min="0" step="0.1" placeholder="예: 15">
+            </label>
+            <div id="sling-hitch-wrap" class="field sling-belt-only hidden">
+              <span class="label">메다는 방법</span>
+              <input type="hidden" name="hitchMethod" id="hitch-method-value" value="straight">
+              <div class="custom-select" id="hitch-method-select" tabindex="0" aria-haspopup="listbox" aria-expanded="false" role="combobox" aria-label="메다는 방법">
+                <div class="custom-select-trigger">
+                  <span class="custom-select-trigger-content">
+                    <img src="assets/sling-straight.png" alt="" class="hitch-option-img hitch-option-img--trigger" width="24" height="40">
+                    <span>곧게</span>
+                  </span>
+                </div>
+                <div class="custom-select-dropdown" role="listbox" id="hitch-method-listbox">
+                  <div class="custom-select-option" role="option" data-value="straight" aria-selected="true">
+                    <img src="assets/sling-straight.png" alt="" class="hitch-option-img" width="24" height="40">
+                    <span>곧게</span>
+                  </div>
+                  <div class="custom-select-option" role="option" data-value="choker" aria-selected="false">
+                    <img src="assets/sling-choker.png" alt="" class="hitch-option-img" width="24" height="40">
+                    <span>초크</span>
+                  </div>
+                  <div class="custom-select-option" role="option" data-value="basket" aria-selected="false">
+                    <img src="assets/sling-basket.png" alt="" class="hitch-option-img" width="24" height="40">
+                    <span>바구니</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">안정성 검토 실행</button>
+          <button type="reset" class="btn btn-secondary">초기화</button>
+        </div>
+      </form>
+
+      <section id="result-section" class="result-section hidden" aria-live="polite">
+        <h2>검토 결과</h2>
+        <div class="result-cards">
+          <div class="result-card">
+            <span class="result-label">전복 모멘트 (ton·m)</span>
+            <span id="overturning-moment" class="result-value">—</span>
+          </div>
+          <div class="result-card">
+            <span class="result-label">복원 모멘트 (ton·m)</span>
+            <span id="restoring-moment" class="result-value">—</span>
+          </div>
+          <div class="result-card result-card--main">
+            <span class="result-label">안정율</span>
+            <span id="safety-factor" class="result-value">—</span>
+          </div>
+        </div>
+        <div id="result-message" class="result-message"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>본 검토는 참고용이며, 실제 시공 시 관련 규정 및 제조사 매뉴얼을 확인하세요.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
